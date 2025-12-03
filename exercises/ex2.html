@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Exercise 2 – Drag & Drop SQL</title>
+<link rel="stylesheet" href="../../../style.css">
+</head>
+<body>
+
+<h2>Exercise 2: Drag & Drop SQL Keywords</h2>
+
+<!-- DRAG ITEMS -->
+<div class="drag-container">
+    <span draggable="true" ondragstart="drag(event)" data-word="SELECT" class="dragitem">SELECT</span>
+    <span draggable="true" ondragstart="drag(event)" data-word="FROM" class="dragitem">FROM</span>
+    <span draggable="true" ondragstart="drag(event)" data-word="WHERE" class="dragitem">WHERE</span>
+</div>
+
+<!-- DROP ZONE -->
+<div id="dropZone" class="dropzone"
+     ondrop="drop(event)"
+     ondragover="allowDrop(event)">
+     Drop keywords here...
+</div>
+
+<!-- INSERT FROM DROP -->
+<button onclick="appendFromDrop(2)">Insert to editor</button>
+
+<!-- EDITOR (UNIQUE) -->
+<textarea id="exercise2_editor" rows="5"></textarea>
+
+<!-- OUTPUT -->
+<div id="outputArea">
+    <div id="outputMsg" class="small">Result will appear below</div>
+    <div id="resultTable"></div>
+</div>
+
+<!-- RUN + CHECK -->
+<button onclick="runExercise(2)">Run</button>
+<button onclick="checkExercise(2)">Check Exercise</button>
+
+<p id="exerciseResult"></p>
+
+<script src="../../../script.js"></script>
+</body>
+</html>
