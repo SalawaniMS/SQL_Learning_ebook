@@ -1,210 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>mnemoBox: SQL Interactive eBook (Full)</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>SQL Learning Ebook</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-<div class="sidebar">
-  <h1>mnemoBox — SQL eBook</h1>
-  <p class="small">Interactive lessons, playground & quizzes.</p>
-  <a href="#ddl">A • DDL (Structure)</a>
-  <a href="#dml">B • DML (Manipulation)</a>
-  <a href="#select">1 • SELECT / WHERE</a>
-  <a href="#order">2 • ORDER BY</a>
-  <a href="#group">3 • GROUP BY / HAVING</a>
-  <a href="#join">4 • JOIN</a>
-  <a href="#play">Playground</a>
-  <a href="#quiz">Quiz</a>
-  <hr style="border:none;border-top:1px solid rgba(255,255,255,0.08);margin:12px 0">
-  <div class="small">Theme</div>
-  <div style="margin-top:8px">
-    <button class="btn" onclick="saveProgress()">Save progress</button>
-    <button class="btn secondary" onclick="loadProgress()">Load progress</button>
-  </div>
-  <p class="small" style="margin-top:12px">Export result: <button class="btn ghost" onclick="exportCSV()">Export CSV</button></p>
-  <div style="height:30px"></div>
-  <div class="small">Note: This mini-engine is educational — supports common SELECT/FROM/WHERE/ORDER/GROUP/HAVING and simple JOINs with COUNT/SUM/AVG.</div>
-</div>
-
-<div class="content">
-  <div class="header">
-    <h2>SQL Interactive eBook — Full Edition</h2>
-    <div class="small">Dataset: <select id="datasetSelect" class="select" onchange="loadSample(this.value)">
-      <option value="staff">Staff & Project</option>
-      <option value="student">Student / Course / Enrollment</option>
-    </select></div>
-  </div>
-
-  <!-- A: DDL -->
-  <div id="ddl" class="card">
-    <h3>A. Database Structure (DDL)</h3>
-    <p class="small">Letakkan semua DDL contoh di sini (CREATE DATABASE / TABLE / ALTER / DROP, PK, FK, constraints)</p>
-    <div class="code" id="ddlBox">
-CREATE TABLE Staff (
-  StaffID INT PRIMARY KEY,
-  StaffName VARCHAR(50),
-  Department VARCHAR(50),
-  Position VARCHAR(50),
-  Salary INT,
-  Status VARCHAR(20)
-);
-
-CREATE TABLE Project (
-  ProjectID VARCHAR(10) PRIMARY KEY,
-  ProjectName VARCHAR(100),
-  StaffID INT
-);
-    </div>
-  </div>
-
-  <!-- B: DML -->
-  <div id="dml" class="card">
-    <h3>B. Data Manipulation (DML)</h3>
-    <p class="small">Contoh insert / update / delete / select / join / group by</p>
-    <div class="code" id="dmlBox">
-INSERT INTO Staff VALUES (101,'Aisyah','IT','Executive',3500,'Active');
-INSERT INTO Staff VALUES (102,'Farhan','IT','Manager',5200,'Active');
-INSERT INTO Staff VALUES (103,'Daniel','HR','Assistant',2700,'Active');
-INSERT INTO Staff VALUES (104,'Nurul','HR','Executive',3300,'Active');
-INSERT INTO Staff VALUES (105,'Hafiz','Marketing','Executive',3600,'Active');
-INSERT INTO Staff VALUES (106,'Sarah','Marketing','Manager',5400,'Resigned');
-INSERT INTO Staff VALUES (107,'Adam','IT','Assistant',2600,'Active');
-    </div>
-  </div>
-
-  <!-- SELECT -->
-  <div id="select" class="card">
-    <h3>SELECT / WHERE</h3>
-    <p class="small">Examples:</p>
-    <div class="code">
--- All staff from IT
-SELECT StaffName, Department
-FROM Staff
-WHERE Department = 'IT';
-
--- Salary > 3000
-SELECT StaffName, Salary
-FROM Staff
-WHERE Salary > 3000;
-    </div>
-  </div>
-
-  <!-- ORDER BY -->
-  <div id="order" class="card">
-    <h3>ORDER BY</h3>
-    <div class="code">
--- Highest to lowest salary
-SELECT StaffName, Salary
-FROM Staff
-ORDER BY Salary DESC;
-    </div>
-  </div>
-
-  <!-- GROUP BY / HAVING -->
-  <div id="group" class="card">
-    <h3>GROUP BY & HAVING</h3>
-    <div class="code">
--- Count staff per department
-SELECT Department, COUNT(*) AS TotalStaff
-FROM Staff
-GROUP BY Department;
-
--- Departments with total salary > 8000
-SELECT Department, SUM(Salary) AS TotalSalary
-FROM Staff
-GROUP BY Department
-HAVING SUM(Salary) > 8000;
-    </div>
-  </div>
-
-  <!-- JOIN -->
-  <div id="join" class="card">
-    <h3>JOIN (Praktikal)</h3>
-    <div class="code">
--- Staff with their projects
-SELECT Staff.StaffName, Project.ProjectName
-FROM Staff
-JOIN Project ON Staff.StaffID = Project.StaffID;
-    </div>
-  </div>
-
-  <!-- Playground -->
-  <div id="play" class="card">
-    <h3>Playground — Mini SQL Engine</h3>
-    <p class="small">Tulis query di kotak, pilih dataset, klik Run. Engine support common classroom queries.</p>
-
-    <div>
-      <label class="small">SQL Editor</label>
-      <textarea id="editor" style="width:100%;height:120px;font-family:monospace">SELECT StaffName, Department, Salary FROM Staff ORDER BY Salary DESC;</textarea>
-    </div>
-
-    <div class="play-controls">
-      <select id="tableSelect" class="select"></select>
-      <button class="btn" onclick="run()">Run</button>
-      <button class="btn secondary" onclick="clearOutput()">Clear</button>
-      <button class="btn ghost" onclick="saveProgress()">Save progress</button>
-      <button class="btn ghost" onclick="loadProgress()">Load progress</button>
-      <button class="btn" onclick="exportCSV()">Export CSV</button>
-    </div>
-
-    <div id="outputArea" class="playground" style="display:block;margin-top:12px">
-      <div id="outputMsg" class="small">Result will appear below</div>
-      <div id="resultTable"></div>
-    </div>
-
-    <div class="delta small" style="margin-top:10px">
-      <strong>Tip:</strong> Try JOINs: <code>SELECT StaffName, ProjectName FROM Staff JOIN Project ON Staff.StaffID = Project.StaffID;</code>
-    </div>
-  </div>
-
-  <!-- Drag & Drop builder -->
-  <div class="card">
-    <h3>Drag & Drop SQL Builder</h3>
-    <p class="small">Drag keywords into drop zone to build statement faster.</p>
-    <div>
-      <span class="keyword" draggable="true">SELECT</span>
-      <span class="keyword" draggable="true">FROM</span>
-      <span class="keyword" draggable="true">JOIN</span>
-      <span class="keyword" draggable="true">LEFT JOIN</span>
-      <span class="keyword" draggable="true">ON</span>
-      <span class="keyword" draggable="true">WHERE</span>
-      <span class="keyword" draggable="true">GROUP BY</span>
-      <span class="keyword" draggable="true">HAVING</span>
-      <span class="keyword" draggable="true">ORDER BY</span>
-      <span class="keyword" draggable="true">COUNT()</span>
-      <span class="keyword" draggable="true">SUM()</span>
-      <span class="keyword" draggable="true">AVG()</span>
-    </div>
-    <div style="margin-top:10px" class="dropzone" id="dropZone">Drop keywords here...</div>
-    <div style="margin-top:8px">
-      <button class="btn" onclick="appendFromDrop()">Insert to editor</button>
-      <button class="btn ghost" onclick="document.getElementById('dropZone').innerText='';">Clear drop</button>
-    </div>
-  </div>
-
-  <!-- Quiz -->
-  <div id="quiz" class="card">
-    <h3>Exercises & Auto-check</h3>
-    <p class="small">Try these queries on the Staff & Project dataset. Type in editor and Run. Then click "Check Exercise" to auto-validate.</p>
-    <ol>
-      <li>List all staff in department IT. <button class="btn" onclick="loadExample(1)">Load</button></li>
-      <li>Count number of projects per staff. <button class="btn" onclick="loadExample(2)">Load</button></li>
-      <li>List projects without staff. <button class="btn" onclick="loadExample(3)">Load</button></li>
-      <li>Departments with total salary &gt; 8000. <button class="btn" onclick="loadExample(4)">Load</button></li>
-    </ol>
-    <div style="margin-top:10px">
-      <button class="btn" onclick="checkExercise()">Check Exercise</button>
-      <div id="exerciseResult" class="delta" style="display:none"></div>
-    </div>
-  </div>
-
-  <div class="footer small">Built for teaching — mnemoBox eBook. Save this file and host on GitHub Pages to share with students.</div>
-</div>
-
-<script src="script.js"></script>
+  <header>
+    <h1>SQL Learning Ebook</h1>
+    <nav>
+      <ul>
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="notes/notes.html">SQL Notes</a></li>
+        <li><a href="exercises/ex1.html">Exercise 1</a></li>
+        <li><a href="exercises/ex2.html">Drag & Drop Exercise</a></li>        
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <p>Welcome! Select an exercise or check your progress in the dashboard.</p>
+  </main>
 </body>
 </html>
