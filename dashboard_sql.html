@@ -1,0 +1,188 @@
+-- SQL Prototype: Complete Version
+
+-- =============================
+-- 1. CREATE DATABASE & USE
+-- =============================
+CREATE DATABASE IF NOT EXISTS innovation_sql_project;
+USE innovation_sql_project;
+
+-- =============================
+-- 2. CREATE TABLES (DDL)
+-- =============================
+
+-- Table: students
+CREATE TABLE IF NOT EXISTS students (
+    student_id INT AUTO_INCREMENT PRIMARY KEY,
+    student_name VARCHAR(100) NOT NULL,
+    program VARCHAR(50),
+    semester INT
+);
+
+-- Table: courses
+CREATE TABLE IF NOT EXISTS courses (
+    course_id INT AUTO_INCREMENT PRIMARY KEY,
+    course_name VARCHAR(100) NOT NULL,
+    credit_hour INT NOT NULL
+);
+
+-- Table: enrollment
+CREATE TABLE IF NOT EXISTS enrollment (
+    enroll_id INT AUTO_INCREMENT PRIMARY KEY,
+    student_id INT,
+    course_id INT,
+    grade CHAR(2),
+    FOREIGN KEY (student_id) REFERENCES students(student_id),
+    FOREIGN KEY (course_id) REFERENCES courses(course_id)
+);
+
+-- =============================
+-- 3. INSERT RECORDS (DML)
+-- =============================
+
+INSERT INTO students (student_name, program, semester) VALUES
+('Ali Ahmad', 'Diploma IT', 1),
+('Nur Aina', 'Diploma CS', 2),
+('Lim Wei', 'Diploma IT', 3);
+
+INSERT INTO courses (course_name, credit_hour) VALUES
+('Programming Fundamentals', 3),
+('Database Systems', 4),
+('Web Development', 3);
+
+INSERT INTO enrollment (student_id, course_id, grade) VALUES
+(1, 1, 'A'),
+(1, 2, 'B'),
+(2, 1, 'A'),
+(3, 3, 'C');
+
+-- =============================
+-- 4. SELECT QUERIES (DQL)
+-- =============================
+
+-- Get all students
+SELECT * FROM students;
+
+-- Get student with course information
+SELECT s.student_name, c.course_name, e.grade
+FROM enrollment e
+JOIN students s ON e.student_id = s.student_id
+JOIN courses c ON e.course_id = c.course_id;
+
+-- =============================
+-- 5. UPDATE & DELETE (DML)
+-- =============================
+
+-- Update grade
+UPDATE enrollment SET grade = 'A+' WHERE enroll_id = 3;
+
+-- Delete a course
+DELETE FROM courses WHERE course_id = 3;
+
+-- =============================
+-- 6. AUTO CHECK FUNCTION (Simulation)
+-- =============================
+-- This part simulates auto-checking student SQL answers.
+-- Normally done in application logic, but we create a sample table.
+
+CREATE TABLE IF NOT EXISTS answer_key (
+    question_id INT PRIMARY KEY,
+    correct_query TEXT
+);
+
+INSERT INTO answer_key VALUES
+(1, 'SELECT * FROM students;'),
+(2, 'SELECT student_name FROM students WHERE semester = 1;');
+
+-- Simulated student answer table
+CREATE TABLE IF NOT EXISTS student_answer (
+    attempt_id INT AUTO_INCREMENT PRIMARY KEY,
+    question_id INT,
+    submitted_query TEXT,
+    is_correct BOOLEAN
+);
+
+-- Example auto-checking (manual simulation)
+INSERT INTO student_answer (question_id, submitted_query, is_correct)
+VALUES (1, 'SELECT * FROM students;', TRUE);
+
+INSERT INTO student_answer (question_id, submitted_query, is_correct)
+VALUES (2, 'SELECT student_name FROM students WHERE semester = 2;', FALSE);
+
+-- View checking results
+SELECT * FROM student_answer;
+
+
+## F. SQL Learning Dashboard (Interactive)
+
+Below is a suggested **HTML + CSS + JS dashboard** layout to include in your SQL Learning prototype. It displays:
+- Progress cards (DDL, DML, SELECT mastery)
+- Attempt history
+- Auto-generated charts (using Chart.js)
+- Quick links to exercises
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SQL Learning Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+ body { font-family: Arial, sans-serif; margin: 0; background:#f4f4f4; }
+ .header { background:#6d0f1c; color:white; padding:20px; text-align:center; }
+ .container { padding:20px; }
+ .cards { display:flex; gap:20px; flex-wrap:wrap; }
+ .card {
+   background:white; padding:20px; border-radius:10px;
+   box-shadow:0 3px 6px rgba(0,0,0,0.1);
+   flex:1; min-width:250px;
+ }
+ .section { margin-top:40px; }
+</style>
+</head>
+<body>
+<div class="header"><h1>SQL Learning Dashboard</h1></div>
+<div class="container">
+
+  <div class="cards">
+    <div class="card"><h3>DDL Mastery</h3><p id="ddlScore">80%</p></div>
+    <div class="card"><h3>DML Mastery</h3><p id="dmlScore">65%</p></div>
+    <div class="card"><h3>SELECT Queries Mastery</h3><p id="selectScore">50%</p></div>
+  </div>
+
+  <div class="section">
+    <h2>Performance Chart</h2>
+    <canvas id="progressChart"></canvas>
+  </div>
+
+  <div class="section">
+    <h2>Quick Exercises</h2>
+    <ul>
+      <li><a href="#">DDL Practice</a></li>
+      <li><a href="#">DML Practice</a></li>
+      <li><a href="#">SELECT Practice</a></li>
+    </ul>
+  </div>
+
+</div>
+
+<script>
+  const ctx = document.getElementById('progressChart');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['DDL', 'DML', 'SELECT'],
+      datasets: [{
+        label: 'Mastery Level (%)',
+        data: [80, 65, 50],
+        borderWidth: 1
+      }]
+    },
+    options: { scales: { y: { beginAtZero: true } } }
+  });
+</script>
+</body>
+</html>
+```
+
