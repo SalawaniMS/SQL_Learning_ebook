@@ -2,45 +2,124 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Exercise 2 – Drag & Drop SQL</title>
-<link rel="stylesheet" href="../../../style.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exercise 2 – True/False SQL</title>
+<link rel="stylesheet" href="style.css">
+<style>
+body { font-family: Arial, sans-serif; background:#f9f9f9; color:#333; padding:20px; }
+h2 { color:#800000; } /* Maroon */
+.card { background:white; padding:20px; margin-bottom:20px; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.1); }
+.btn { padding:6px 12px; margin-top:10px; cursor:pointer; border:none; border-radius:4px; background:#800000; color:white; }
+.btn:hover { background:#a00000; }
+.radio-group label { margin-right:15px; }
+#ex2Result { margin-top:15px; font-weight:bold; }
+</style>
 </head>
 <body>
 
-<h2>Exercise 2: Drag & Drop SQL Keywords</h2>
+<div class="card">
+  <h2>Exercise 2 – True/False SQL</h2>
+  <ol>
+    <li>
+      The `SELECT *` statement retrieves all columns from a table.
+      <div class="radio-group">
+        <label><input type="radio" name="q1" value="true"> True</label>
+        <label><input type="radio" name="q1" value="false"> False</label>
+      </div>
+    </li>
+    <li>
+      The `WHERE` clause is used to filter rows based on a condition.
+      <div class="radio-group">
+        <label><input type="radio" name="q2" value="true"> True</label>
+        <label><input type="radio" name="q2" value="false"> False</label>
+      </div>
+    </li>
+    <li>
+      The `JOIN` clause is used to combine data from two tables.
+      <div class="radio-group">
+        <label><input type="radio" name="q3" value="true"> True</label>
+        <label><input type="radio" name="q3" value="false"> False</label>
+      </div>
+    </li>
+    <li>
+      `ORDER BY` clause is used to sort the result set.
+      <div class="radio-group">
+        <label><input type="radio" name="q4" value="true"> True</label>
+        <label><input type="radio" name="q4" value="false"> False</label>
+      </div>
+    </li>
+    <li>
+      `GROUP BY` clause is used to filter rows in a table.
+      <div class="radio-group">
+        <label><input type="radio" name="q5" value="true"> True</label>
+        <label><input type="radio" name="q5" value="false"> False</label>
+      </div>
+    </li>
+    <li>
+      `HAVING` is used to filter groups created by `GROUP BY`.
+      <div class="radio-group">
+        <label><input type="radio" name="q6" value="true"> True</label>
+        <label><input type="radio" name="q6" value="false"> False</label>
+      </div>
+    </li>
+    <li>
+      `INSERT INTO` is used to update existing rows.
+      <div class="radio-group">
+        <label><input type="radio" name="q7" value="true"> True</label>
+        <label><input type="radio" name="q7" value="false"> False</label>
+      </div>
+    </li>
+    <li>
+      `DELETE` statement removes rows from a table.
+      <div class="radio-group">
+        <label><input type="radio" name="q8" value="true"> True</label>
+        <label><input type="radio" name="q8" value="false"> False</label>
+      </div>
+    </li>
+    <li>
+      `COUNT()` returns the sum of numeric values in a column.
+      <div class="radio-group">
+        <label><input type="radio" name="q9" value="true"> True</label>
+        <label><input type="radio" name="q9" value="false"> False</label>
+      </div>
+    </li>
+    <li>
+      `DISTINCT` keyword is used to remove duplicate rows.
+      <div class="radio-group">
+        <label><input type="radio" name="q10" value="true"> True</label>
+        <label><input type="radio" name="q10" value="false"> False</label>
+      </div>
+    </li>
+  </ol>
 
-<!-- DRAG ITEMS -->
-<div class="drag-container">
-    <span draggable="true" ondragstart="drag(event)" data-word="SELECT" class="dragitem">SELECT</span>
-    <span draggable="true" ondragstart="drag(event)" data-word="FROM" class="dragitem">FROM</span>
-    <span draggable="true" ondragstart="drag(event)" data-word="WHERE" class="dragitem">WHERE</span>
+  <button class="btn" onclick="checkEx2()">Check Answers</button>
+  <div id="ex2Result"></div>
+  <button class="btn" onclick="window.location.href='../index.html'">Back to Index</button>
 </div>
 
-<!-- DROP ZONE -->
-<div id="dropZone" class="dropzone"
-     ondrop="drop(event)"
-     ondragover="allowDrop(event)">
-     Drop keywords here...
-</div>
+<script>
+function checkEx2(){
+  var answers = {
+    q1: "true",
+    q2: "true",
+    q3: "true",
+    q4: "true",
+    q5: "false",
+    q6: "true",
+    q7: "false",
+    q8: "true",
+    q9: "false",
+    q10:"true"
+  };
+  var score = 0;
+  for(var i=1; i<=10; i++){
+    var q = document.querySelector('input[name="q'+i+'"]:checked');
+    if(q && q.value === answers['q'+i]) score++;
+  }
+  document.getElementById('ex2Result').innerText = 'Score: '+score+'/10';
+}
+</script>
 
-<!-- INSERT FROM DROP -->
-<button onclick="appendFromDrop(2)">Insert to editor</button>
-
-<!-- EDITOR (UNIQUE) -->
-<textarea id="exercise2_editor" rows="5"></textarea>
-
-<!-- OUTPUT -->
-<div id="outputArea">
-    <div id="outputMsg" class="small">Result will appear below</div>
-    <div id="resultTable"></div>
-</div>
-
-<!-- RUN + CHECK -->
-<button onclick="runExercise(2)">Run</button>
-<button onclick="checkExercise(2)">Check Exercise</button>
-
-<p id="exerciseResult"></p>
-
-<script src="../../../script.js"></script>
 </body>
 </html>
+
