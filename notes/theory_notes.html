@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Theory Notes - SQL (Collapsible)</title>
+<style>
+    :root {
+        --primary-color: #800000; /* Maroon */
+        --secondary-color: #808080; /* Grey */
+        --bg-color: #f5f5f5;
+        --text-color: #333;
+        --watermark-opacity: 0.1;
+        --code-bg: #f0f0f0;
+    }
+
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        min-height: 100vh;
+    }
+
+    header {
+        background-color: var(--primary-color);
+        color: white;
+        padding: 1rem;
+        text-align: center;
+    }
+
+    main {
+        max-width: 900px;
+        margin: 2rem auto;
+        padding: 1rem;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+        color: var(--primary-color);
+        margin-top: 0;
+    }
+
+    .collapsible {
+        background-color: var(--primary-color);
+        color: white;
+        cursor: pointer;
+        padding: 0.5rem 1rem;
+        width: 100%;
+        border: none;
+        text-align: left;
+        outline: none;
+        font-size: 1rem;
+        border-radius: 5px;
+        margin-top: 0.5rem;
+        transition: background-color 0.3s;
+    }
+
+    .collapsible:hover {
+        background-color: #660000;
+    }
+
+    .content {
+        padding: 0 1rem;
+        display: none;
+        overflow: hidden;
+        margin-bottom: 1rem;
+    }
+
+    pre {
+        background-color: var(--code-bg);
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+        overflow-x: auto;
+    }
+
+    a.back-btn {
+        display: inline-block;
+        margin-top: 1rem;
+        padding: 0.5rem 1rem;
+        background-color: var(--secondary-color);
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+    }
+
+    a.back-btn:hover {
+        background-color: var(--primary-color);
+    }
+
+    .watermark {
+        position: fixed;
+        bottom: 10px;
+        width: 100%;
+        text-align: center;
+        color: var(--primary-color);
+        font-size: 2rem;
+        opacity: var(--watermark-opacity);
+        pointer-events: none;
+    }
+
+    @media (max-width: 768px) {
+        main {
+            margin: 1rem;
+            padding: 0.8rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        h1 {
+            font-size: 1.5rem;
+        }
+        .collapsible {
+            font-size: 0.95rem;
+            padding: 0.4rem 0.8rem;
+        }
+        a.back-btn {
+            padding: 0.4rem 0.8rem;
+        }
+    }
+</style>
+</head>
+<body>
+    <!-- Header -->
+<header class="hero">
+  <p>Theory Notes SQL</p>
+  <p>Basic Knowledge and Introduction to SQL</p>
+</header>
+
+    <main>
+        <button class="collapsible">Introduction to SQL</button>
+        <div class="content">
+            <ul>
+                <li>SQL functions fit into two broad categories:
+                    <ul>
+                        <li><strong>Data Definition Language (DDL)</strong>: create database objects like tables, indexes, views; define access rights.</li>
+                        <li><strong>Data Manipulation Language (DML)</strong>: insert, update, delete, retrieve data.</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <button class="collapsible">Data Definition Commands</button>
+        <div class="content">
+            <ul>
+                <li>Database: shared structure containing end-user data and metadata stored in tables.</li>
+                <li>Before using new DBMS:
+                    <ul>
+                        <li>Create database structure to hold tables</li>
+                        <li>Create tables for end-user data</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+        <button class="collapsible">Creating the Database</button>
+        <div class="content">
+            <ul>
+                <li>Two tasks:
+                    <ul>
+                        <li>Create database structure</li>
+                        <li>Create tables to hold data</li>
+                    </ul>
+                </li>
+                <li>RDBMS creates physical files; differs between systems</li>
+            </ul>
+        </div>
+
+        <button class="collapsible">Data Types</button>
+        <div class="content">
+            <ul>
+                <li>Selection dictated by data nature and intended use.</li>
+                <li>Important for sorting and data retrieval.</li>
+            </ul>
+        </div>
+
+        <button class="collapsible">Creating Table Structures</button>
+        <div class="content">
+            <ul>
+                <li>One line per column definition</li>
+                <li>Line up attributes and constraints</li>
+                <li>Names capitalized; NOT NULL, UNIQUE, primary/foreign keys</li>
+                <li>Command ends with semicolon</li>
+            </ul>
+        </div>
+
+        <button class="collapsible">Data Definition Commands Example</button>
+        <div class="content">
+            <pre>
+CREATE DATABASE &lt;database_name&gt;;
+DROP TABLE &lt;table_name&gt;;
+CREATE TABLE &lt;table_name&gt; (
+    attribute1_name data_type1 [NOT NULL] [UNIQUE],
+    attribute2_name data_type2 [NOT NULL] [UNIQUE],
+    PRIMARY KEY(attribute_name),
+    FOREIGN KEY(attribute_name) REFERENCES &lt;table_name&gt;
+);
+            </pre>
+        </div>
+
+        <button class="collapsible">Some Common SQL Data Types</button>
+        <div class="content">
+            <ul>
+                <li>Integer → INTEGER, Small Integer → SMALLINT</li>
+                <li>Numeric → NUMERIC(l,d), Decimal → DECIMAL(l,d)</li>
+                <li>Character → CHAR(l), VARCHAR(l)</li>
+                <li>Date → DATE</li>
+            </ul>
+        </div>
+
+        <button class="collapsible">SQL Indexes</button>
+        <div class="content">
+            <ul>
+                <li>Primary key creates unique index automatically</li>
+                <li>CREATE INDEX for selected attribute</li>
+                <li>Composite index: two or more attributes, prevent duplication</li>
+            </ul>
+        </div>
+
+        <button class="collapsible">Data Manipulation Commands</button>
+        <div class="content">
+            <ul>
+                <li>Adding, updating, deleting table rows</li>
+                <li>Saving/restoring table contents</li>
+                <li>Insert rows with select subquery</li>
+            </ul>
+        </div>
+
+        <button class="collapsible">Data Entry</button>
+        <div class="content">
+            <pre>
+INSERT INTO &lt;table_name&gt; 
+VALUES (attribute1_value, attribute2_value, ...);
+            </pre>
+        </div>
+
+        <button class="collapsible">Checking Table Contents</button>
+        <div class="content">
+            <pre>
+SELECT &lt;attribute_names&gt; FROM &lt;table_names&gt;;
+            </pre>
+        </div>
+
+        <button class="collapsible">Saving and Restoring Table Contents</button>
+        <div class="content">
+            <pre>
+COMMIT &lt;table_names&gt;;
+ROLLBACK;
+            </pre>
+        </div>
+
+        <button class="collapsible">Updating Table Rows</button>
+        <div class="content">
+            <pre>
+UPDATE &lt;table_name&gt;
+SET &lt;attribute_name&gt; = &lt;attribute_value&gt;
+WHERE &lt;attribute_name&gt; = &lt;attribute_value&gt;;
+            </pre>
+        </div>
+
+        <button class="collapsible">Deleting Table Rows</button>
+        <div class="content">
+            <pre>
+DELETE FROM &lt;table_name&gt;
+WHERE &lt;attribute_name&gt; = &lt;attribute_value&gt;;
+            </pre>
+        </div>
+
+        <a href="../index.html" class="back-btn">Back to Index</a>
+    </main>
+
+    <div class="watermark">Teacher Wani</div>
+
+    <script>
+        const collapsibles = document.querySelectorAll('.collapsible');
+        collapsibles.forEach(button => {
+            button.addEventListener('click', () => {
+                button.classList.toggle('active');
+                const content = button.nextElementSibling;
+                content.style.display = content.style.display === 'block' ? 'none' : 'block';
+            });
+        });
+    </script>
+</body>
+</html>
