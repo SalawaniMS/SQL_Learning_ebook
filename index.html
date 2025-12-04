@@ -1,24 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>SQL Learning Ebook</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>mnemoBox — SQL Interactive eBook</title>
+<style>
+  /* ===== Reset / Basic ===== */
+  * {margin:0; padding:0; box-sizing:border-box;}
+  body {font-family: Arial, sans-serif; background:#f8f8f8; color:#333; position:relative;}
+  a {text-decoration:none;}
+  
+  /* ===== Header / Hero ===== */
+  .hero {
+    background: linear-gradient(90deg, #800000, #b03060);
+    color: #fff; text-align:center; padding:40px 20px;
+  }
+  .hero h1 {font-size:2.5rem; margin-bottom:10px;}
+  .hero p {font-size:1.2rem;}
+
+  /* ===== Grid Cards ===== */
+  .grid {display:grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap:20px; padding:20px;}
+  .card-panel {
+    background:#fff; border-radius:12px; padding:20px; box-shadow:0 2px 6px rgba(0,0,0,0.15);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display:flex; flex-direction:column; justify-content:space-between;
+  }
+  .card-panel:hover {
+    transform: translateY(-5px);
+    box-shadow:0 6px 18px rgba(0,0,0,0.25);
+  }
+  .card-panel h3 {color:#800000; margin-bottom:12px;}
+  .card-panel p {flex-grow:1; margin-bottom:12px;}
+  .card-panel .btn {
+    display:inline-block; padding:8px 16px; border-radius:6px; border:none;
+    background:#800000; color:#fff; cursor:pointer; font-weight:bold;
+  }
+  .card-panel .btn:hover {background:#b03060;}
+  .card-panel .btn.secondary {background:#555; color:#fff;}
+  .card-panel .btn.ghost {
+    background:transparent; border:2px solid #800000; color:#800000;
+  }
+  .card-panel .btn.ghost:hover {background:#800000; color:#fff;}
+
+  /* ===== Footer ===== */
+  footer {text-align:center; padding:20px; color:#777; font-size:0.9rem; position:relative;}
+
+  /* ===== Watermark ===== */
+  .watermark {
+    position:absolute;
+    bottom:10px;
+    right:10px;
+    font-size:1rem;
+    color:rgba(128,0,0,0.2);
+    display:flex;
+    align-items:center;
+    gap:6px;
+  }
+  .watermark img {
+    width:24px; height:24px; opacity:0.2;
+  }
+</style>
 </head>
 <body>
-  <header>
-    <h1>SQL Learning Ebook</h1>
-    <nav>
-      <ul>
-        <li><a href="dashboard.html">Dashboard</a></li>
-        <li><a href="notes/notes.html">SQL Notes</a></li>
-        <li><a href="exercises/ex1.html">Exercise 1</a></li>
-        <li><a href="exercises/ex2.html">Drag & Drop Exercise</a></li>        
-      </ul>
-    </nav>
-  </header>
-  <main>
-    <p>Welcome! Select an exercise or check your progress in the dashboard.</p>
-  </main>
+
+<!-- Hero -->
+<header class="hero">
+  <h1>mnemoBox — Interactive SQL eBook</h1>
+  <p>Learn SQL the fun way! Lessons, playground & exercises.</p>
+</header>
+
+<!-- Grid Sections -->
+<div class="grid">
+  <div class="card-panel">
+    <h3>Notes / Lessons</h3>
+    <p>Interactive SQL lessons with examples, explanations, and playground.</p>
+    <a href="notes.html" class="btn">Go to Notes</a>
+  </div>
+  <div class="card-panel">
+    <h3>Exercises 1 — MCQs</h3>
+    <p>Test your SQL knowledge with multiple-choice questions.</p>
+    <a href="ex1.html" class="btn">Go to Exercises</a>
+  </div>
+  <div class="card-panel">
+    <h3>Exercises 2 — True / False</h3>
+    <p>Strengthen your SQL understanding with True/False exercises.</p>
+    <a href="ex2.html" class="btn">Go to Exercises</a>
+  </div>
+  <div class="card-panel">
+    <h3>Playground</h3>
+    <p>Try SQL queries on sample datasets. Supports SELECT, WHERE, ORDER BY, JOIN.</p>
+    <a href="notes.html#play" class="btn">Open Playground</a>
+  </div>
+  <div class="card-panel">
+    <h3>Dashboard</h3>
+    <p>Track your progress: completed exercises, points earned, and stats.</p>
+    <a href="dashboard.html" class="btn">Open Dashboard</a>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer>
+  Built for teaching — mnemoBox eBook. Host on GitHub Pages to share with students.
+</footer>
+
+<!-- Watermark -->
+<div class="watermark">
+  <img src="teacher-icon.png" alt="Teacher Icon">
+  Teacher Wani
+</div>
+
 </body>
 </html>
