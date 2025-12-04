@@ -19,6 +19,7 @@
   <a href="#join">4 • JOIN</a>
   <a href="#play">Playground</a>
   <a href="#quiz">Quiz</a>
+  <a href="../index.html">🏠 Back to Index</a>
   <hr style="border:none;border-top:1px solid rgba(255,255,255,0.08);margin:12px 0">
   <div class="small">Theme</div>
   <div style="margin-top:8px">
@@ -27,22 +28,24 @@
   </div>
   <p class="small" style="margin-top:12px">Export result: <button class="btn ghost" onclick="exportCSV()">Export CSV</button></p>
   <div style="height:30px"></div>
-  <div class="small">Note: This mini-engine is educational — supports common SELECT/FROM/WHERE/ORDER/GROUP/HAVING and simple JOINs with COUNT/SUM/AVG.</div>
+  <div class="small">Dashboard: Completed <span id="completed">0</span> | Points <span id="points">0</span></div>
 </div>
 
 <div class="content">
+
   <div class="header">
     <h2>SQL Interactive eBook — Full Edition</h2>
-    <div class="small">Dataset: <select id="datasetSelect" class="select" onchange="loadSample(this.value)">
-      <option value="staff">Staff & Project</option>
-      <option value="student">Student / Course / Enrollment</option>
-    </select></div>
+    <div class="small">Dataset: 
+      <select id="datasetSelect" class="select" onchange="loadSample(this.value)">
+        <option value="staff">Staff & Project</option>
+        <option value="project">Project</option>
+      </select>
+    </div>
   </div>
 
   <!-- A: DDL -->
   <div id="ddl" class="card">
     <h3>A. Database Structure (DDL)</h3>
-    <p class="small">Letakkan semua DDL contoh di sini (CREATE DATABASE / TABLE / ALTER / DROP, PK, FK, constraints)</p>
     <div class="code" id="ddlBox">
 CREATE TABLE Staff (
   StaffID INT PRIMARY KEY,
@@ -64,7 +67,6 @@ CREATE TABLE Project (
   <!-- B: DML -->
   <div id="dml" class="card">
     <h3>B. Data Manipulation (DML)</h3>
-    <p class="small">Contoh insert / update / delete / select / join / group by</p>
     <div class="code" id="dmlBox">
 INSERT INTO Staff VALUES (101,'Aisyah','IT','Executive',3500,'Active');
 INSERT INTO Staff VALUES (102,'Farhan','IT','Manager',5200,'Active');
@@ -74,135 +76,117 @@ INSERT INTO Staff VALUES (105,'Hafiz','Marketing','Executive',3600,'Active');
 INSERT INTO Staff VALUES (106,'Sarah','Marketing','Manager',5400,'Resigned');
 INSERT INTO Staff VALUES (107,'Adam','IT','Assistant',2600,'Active');
     </div>
-  </div>
 
-  <!-- SELECT -->
-  <div id="select" class="card">
-    <h3>SELECT / WHERE</h3>
-    <p class="small">Examples:</p>
+    <h4>Sample SELECT / WHERE:</h4>
+    <div class="code">SELECT StaffName, Department FROM Staff WHERE Department='IT';</div>
+    <table>
+      <tr><th>StaffName</th><th>Department</th></tr>
+      <tr><td>Aisyah</td><td>IT</td></tr>
+      <tr><td>Farhan</td><td>IT</td></tr>
+      <tr><td>Adam</td><td>IT</td></tr>
+    </table>
+
+    <h4>Sample ORDER BY:</h4>
+    <div class="code">SELECT StaffName, Salary FROM Staff ORDER BY Salary DESC;</div>
+    <table>
+      <tr><th>StaffName</th><th>Salary</th></tr>
+      <tr><td>Sarah</td><td>5400</td></tr>
+      <tr><td>Farhan</td><td>5200</td></tr>
+      <tr><td>Hafiz</td><td>3600</td></tr>
+    </table>
+
+    <h4>Sample GROUP BY / HAVING:</h4>
     <div class="code">
--- All staff from IT
-SELECT StaffName, Department
-FROM Staff
-WHERE Department = 'IT';
-
--- Salary > 3000
-SELECT StaffName, Salary
-FROM Staff
-WHERE Salary > 3000;
-    </div>
-  </div>
-
-  <!-- ORDER BY -->
-  <div id="order" class="card">
-    <h3>ORDER BY</h3>
-    <div class="code">
--- Highest to lowest salary
-SELECT StaffName, Salary
-FROM Staff
-ORDER BY Salary DESC;
-    </div>
-  </div>
-
-  <!-- GROUP BY / HAVING -->
-  <div id="group" class="card">
-    <h3>GROUP BY & HAVING</h3>
-    <div class="code">
--- Count staff per department
-SELECT Department, COUNT(*) AS TotalStaff
-FROM Staff
-GROUP BY Department;
-
--- Departments with total salary > 8000
 SELECT Department, SUM(Salary) AS TotalSalary
 FROM Staff
 GROUP BY Department
-HAVING SUM(Salary) > 8000;
+HAVING SUM(Salary) &gt; 8000;
     </div>
-  </div>
+    <table>
+      <tr><th>Department</th><th>TotalSalary</th></tr>
+      <tr><td>IT</td><td>11300</td></tr>
+      <tr><td>Marketing</td><td>9000</td></tr>
+    </table>
 
-  <!-- JOIN -->
-  <div id="join" class="card">
-    <h3>JOIN (Praktikal)</h3>
+    <h4>Sample JOIN:</h4>
     <div class="code">
--- Staff with their projects
 SELECT Staff.StaffName, Project.ProjectName
 FROM Staff
 JOIN Project ON Staff.StaffID = Project.StaffID;
     </div>
+    <table>
+      <tr><th>StaffName</th><th>ProjectName</th></tr>
+      <tr><td>Aisyah</td><td>Website</td></tr>
+      <tr><td>Aisyah</td><td>App</td></tr>
+      <tr><td>Farhan</td><td>Database</td></tr>
+      <tr><td>Hafiz</td><td>Marketing Campaign</td></tr>
+    </table>
   </div>
 
-  <!-- Playground -->
-  <div id="play" class="card">
-    <h3>Playground — Mini SQL Engine</h3>
-    <p class="small">Tulis query di kotak, pilih dataset, klik Run. Engine support common classroom queries.</p>
+<!-- Playground -->
+<div id="play" class="card">
+  <h3>Playground — Mini SQL Engine</h3>
 
-    <div>
-      <label class="small">SQL Editor</label>
-      <textarea id="editor" style="width:100%;height:120px;font-family:monospace">SELECT StaffName, Department, Salary FROM Staff ORDER BY Salary DESC;</textarea>
-    </div>
+  <textarea id="editor" style="width:100%;height:120px;font-family:monospace">
+SELECT StaffName, Department, Salary FROM Staff ORDER BY Salary DESC;
+  </textarea>
 
-    <div class="play-controls">
-      <select id="tableSelect" class="select"></select>
-      <button class="btn" onclick="run()">Run</button>
-      <button class="btn secondary" onclick="clearOutput()">Clear</button>
-      <button class="btn ghost" onclick="saveProgress()">Save progress</button>
-      <button class="btn ghost" onclick="loadProgress()">Load progress</button>
-      <button class="btn" onclick="exportCSV()">Export CSV</button>
-    </div>
-
-    <div id="outputArea" class="playground" style="display:block;margin-top:12px">
-      <div id="outputMsg" class="small">Result will appear below</div>
-      <div id="resultTable"></div>
-    </div>
-
-    <div class="delta small" style="margin-top:10px">
-      <strong>Tip:</strong> Try JOINs: <code>SELECT StaffName, ProjectName FROM Staff JOIN Project ON Staff.StaffID = Project.StaffID;</code>
-    </div>
+  <div class="play-controls">
+    <select id="tableSelect" class="select"></select>
+    <button class="btn" onclick="run()">Run</button>
+    <button class="btn" onclick="clearAll()">Clear</button>
+    <button class="btn ghost" onclick="saveProgress()">Save</button>
+    <button class="btn ghost" onclick="loadProgress()">Load</button>
+    <button class="btn" onclick="exportCSV()">Export CSV</button>
   </div>
 
-  <!-- Drag & Drop builder -->
-  <div class="card">
-    <h3>Drag & Drop SQL Builder</h3>
-    <p class="small">Drag keywords into drop zone to build statement faster.</p>
-    <div>
-      <span class="keyword" draggable="true">SELECT</span>
-      <span class="keyword" draggable="true">FROM</span>
-      <span class="keyword" draggable="true">JOIN</span>
-      <span class="keyword" draggable="true">LEFT JOIN</span>
-      <span class="keyword" draggable="true">ON</span>
-      <span class="keyword" draggable="true">WHERE</span>
-      <span class="keyword" draggable="true">GROUP BY</span>
-      <span class="keyword" draggable="true">HAVING</span>
-      <span class="keyword" draggable="true">ORDER BY</span>
-      <span class="keyword" draggable="true">COUNT()</span>
-      <span class="keyword" draggable="true">SUM()</span>
-      <span class="keyword" draggable="true">AVG()</span>
-    </div>
-    <div style="margin-top:10px" class="dropzone" id="dropZone">Drop keywords here...</div>
-    <div style="margin-top:8px">
-      <button class="btn" onclick="appendFromDrop()">Insert to editor</button>
-      <button class="btn ghost" onclick="document.getElementById('dropZone').innerText='';">Clear drop</button>
-    </div>
+  <div id="outputArea" class="playground" style="margin-top:12px">
+    <div id="outputMsg" class="small">Result will appear below</div>
+    <div id="resultTable"></div>
+  </div>
+</div>
+
+<!-- Drag & Drop -->
+<div class="card">
+  <h3>Drag & Drop SQL Builder</h3>
+
+  <!-- Keyword Buttons -->
+  <div style="margin-bottom:12px">
+    <span class="keyword" draggable="true" ondragstart="drag(event)" data-word="SELECT">SELECT</span>
+    <span class="keyword" draggable="true" ondragstart="drag(event)" data-word="FROM">FROM</span>
+    <span class="keyword" draggable="true" ondragstart="drag(event)" data-word="WHERE">WHERE</span>
+    <span class="keyword" draggable="true" ondragstart="drag(event)" data-word="JOIN">JOIN</span>
+    <span class="keyword" draggable="true" ondragstart="drag(event)" data-word="GROUP BY">GROUP BY</span>
+    <span class="keyword" draggable="true" ondragstart="drag(event)" data-word="HAVING">HAVING</span>
+    <span class="keyword" draggable="true" ondragstart="drag(event)" data-word="ORDER BY">ORDER BY</span>
+    <span class="keyword" draggable="true" ondragstart="drag(event)" data-word="COUNT(*)">COUNT()</span>
+    <span class="keyword" draggable="true" ondragstart="drag(event)" data-word="SUM(Salary)">SUM()</span>
   </div>
 
-  <!-- Quiz -->
+  <!-- DROP ZONE CLEARLY VISIBLE -->
+  <div id="dropZone"
+       ondragover="allowDrop(event)"
+       ondrop="drop(event)">
+    Drop SQL keywords here...
+  </div>
+
+  <button class="btn" onclick="appendFromDrop()">Insert to Editor</button>
+  <button class="btn ghost" onclick="document.getElementById('dropZone').innerText='Drop SQL keywords here...'">Clear Drop</button>
+</div>
+
+  <!-- Quiz / Exercises -->
   <div id="quiz" class="card">
     <h3>Exercises & Auto-check</h3>
-    <p class="small">Try these queries on the Staff & Project dataset. Type in editor and Run. Then click "Check Exercise" to auto-validate.</p>
     <ol>
       <li>List all staff in department IT. <button class="btn" onclick="loadExample(1)">Load</button></li>
       <li>Count number of projects per staff. <button class="btn" onclick="loadExample(2)">Load</button></li>
-      <li>List projects without staff. <button class="btn" onclick="loadExample(3)">Load</button></li>
+      <li>List all staff who have a salary greater than 5000. <button class="btn" onclick="loadExample(3)">Load</button></li>
       <li>Departments with total salary &gt; 8000. <button class="btn" onclick="loadExample(4)">Load</button></li>
     </ol>
-    <div style="margin-top:10px">
-      <button class="btn" onclick="checkExercise()">Check Exercise</button>
-      <div id="exerciseResult" class="delta" style="display:none"></div>
-    </div>
+    <button class="btn" onclick="checkExercise()">Check Exercise</button>
+    <div id="exerciseResult" class="delta" style="margin-top:8px"></div>
   </div>
 
-  <div class="footer small">Built for teaching — mnemoBox eBook. Save this file and host on GitHub Pages to share with students.</div>
 </div>
 
 <script src="../script.js"></script>
