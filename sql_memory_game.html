@@ -41,8 +41,15 @@ transform: translateY(-20px);
 transition: all 0.6s ease;
 }
 #badge.show {
-opacity: 1;
-transform: translateY(0);
+    opacity: 1;
+    transform: translateY(0) scale(1.1);
+    animation: pulse 1s ease-in-out infinite alternate;
+}
+
+@keyframes pulse {
+    0% { transform: translateY(0) scale(1.0); }
+    50% { transform: translateY(-5px) scale(1.1); }
+    100% { transform: translateY(0) scale(1.0); }
 }
 
 footer { text-align:center; font-size:0.9em; margin-top:20px; color:#666; }
@@ -145,4 +152,5 @@ setTimeout(loadQuestion, 500);
 loadQuestion();
 </script>
 </body>
+
 </html>
