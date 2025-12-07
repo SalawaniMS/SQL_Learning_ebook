@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SmartSQL Hub – Memory Match</title>
+<style>
+body { font-family: Arial; background:#f4f6f8; text-align:center; margin:0; }
+header { background:maroon; color:#fff; padding:15px; }
+.container { max-width:600px; margin:20px auto; padding:20px; background:#fff; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
+.grid { display:grid; grid-template-columns: repeat(4, 100px); grid-gap:10px; justify-content:center; margin:20px 0; }
+.card { width:100px; height:100px; background:#eee; border-radius:8px; display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:0.9em; cursor:pointer; }
+.card.flipped { background:maroon; color:#fff; cursor:default; }
+#scoreDisplay, #timerDisplay { font-weight:bold; margin:10px 0; }
+#badge { font-size:1.5em; color:gold; font-weight:bold; min-height:1.5em; margin-top:10px; }
+button { padding:8px 12px; border:none; background:maroon; color:#fff; border-radius:4px; cursor:pointer; margin:5px; }
+button:hover { opacity:0.9; }
+.confetti-piece { position:absolute; width:10px; height:10px; animation: fall 1s linear; }
+@keyframes fall { 0% { transform: translateY(0) rotate(0deg);} 100% { transform: translateY(200px) rotate(360deg);} }
+</style>
+</head>
+<body>
+<header>
+<h1>SmartSQL Hub – SQL Memory Match</h1>
+<p>Match pairs of mnemonic ↔ SQL statement!</p>
+</header>
+<div class="container">
+<div id="timerDisplay">Time Left: <span id="timeLeft">60</span>s</div>
+<div id="scoreDisplay">Score: 0</div>
+<div class="grid" id="grid"></div>
+<div id="badge"></div>
+<button onclick="location.reload()">🔄 Restart Game</button>
+<button onclick="location.href='index.html'">⬅ Back to SmartSQL Hub</button>
+<div id="confettiContainer"></div>
+</div>
+
+<script>
+// SQL pairs
+var pairs = [
+    {mnemonic:"SFW", statement:"SELECT * FROM table WHERE condition;"},
+    {mnemonic:"SFOB", statement:"SELECT * FROM table ORDER BY column;"},
+    {mnemonic:"IIV", statement:"INSERT INTO table VALUES (...);"},
+    {mnemonic:"ATAC", statement:"ALTER TABLE ADD COLUMN column_name data_type;"},
+    {mnemonic:"ATDC", statement:"ALTER TABLE DELETE COLUMN column_name;"},
+    {mnemonic:"USW", statement:"UPDATE table SET column=value WHERE condition;"},
+    {mnemonic:"DFW", statement:"DELETE FROM table WHERE condition;"}
+];
+
+// Duplicate & shuffle
+var cardsData = [];
+for(var i=0;i<pairs.length;i++){
+    cardsData.push({type:"mnemonic", value:pairs[i].mnemonic, pair:pairs[i].statement});
+    cardsData.push({type:"statement", value:pairs[i].statement, pair:pairs[i].mnemonic});
+}
+cardsData = shuffle(cardsData);
+
+var grid = document.getElementById('grid');
+var firstCard=null, secondCard=null;
+var score=0;
+var matchedPairs=0;
+
+// create cards
+for(var i=0;i<cardsData.length;i++){
+    var card = document.createElement('div');
+    card.className='card';
+    card.dataset.value=cardsData[i].value;
+    card.dataset.pair=cardsData[i].pair;
+    card.addEventListener('click', flipCard);
+    grid.appendChild(card);
+}
+
+// Timer
+var timeLeft=60;
+var timerInterval = setInterval(function(){
+    timeLeft--;
+    document.getElementById('timeLeft').innerText=timeLeft;
+    if(timeLeft<=0){ clearInterval(timerInterval); alert("⏰ Time's up!"); disableAllCards(); }
+},1000);
+
+function disableAllCards(){
+    var cards=document.getElementsByClassName('card');
+    for(var i=0;i<cards.length;i++){ cards[i].removeEventListener('click',flipCard); }
+}
+
+// flip logic
+function flipCard(){
+    if(this.classList.contains('flipped')) return;
+    this.classList.add('flipped'); this.innerText=this.dataset.value;
+    if(!firstCard){ firstCard=this; } 
+    else if(!secondCard){ secondCard=this; checkMatch(); }
+}
+
+function checkMatch(){
+    if(firstCard.dataset.pair===secondCard.dataset.value){
+        score++; matchedPairs++;
+        document.getElementById('scoreDisplay').innerText="Score: "+score;
+        firstCard=null; secondCard=null;
+        if(matchedPairs===pairs.length){
+            document.getElementById('badge').innerText="🏆 All Pairs Matched! Badge Unlocked!";
+            launchConfetti();
+            clearInterval(timerInterval);
+        } else if(score %2 ===0){
+            document.getElementById('badge').innerText="🥇 Milestone Badge!";
+        }
+    } else {
+        setTimeout(function(){
+            firstCard.classList.remove('flipped'); firstCard.innerText='';
+            secondCard.classList.remove('flipped'); secondCard.innerText='';
+            firstCard=null; secondCard=null;
+        },800);
+    }
+}
+
+// Confetti
+function launchConfetti(){
+    var container = document.getElementById('confettiContainer');
+    for(var i=0;i<30;i++){
+        var confetti = document.createElement('div');
+        confetti.className='confetti-piece';
+        confetti.style.left=Math.random()*100+'%';
+        confetti.style.background=['gold','red','blue','green','orange'][Math.floor(Math.random()*5)];
+        container.appendChild(confetti);
+        setTimeout(function(){ confetti.remove(); },2000);
+    }
+}
+
+// Shuffle function
+function shuffle(array){
+    for(var i=array.length-1;i>0;i--){
+        var j=Math.floor(Math.random()*(i+1));
+        var temp=array[i]; array[i]=array[j]; array[j]=temp;
+    }
+    return array;
+}
+</script>
+</body>
+</html>
