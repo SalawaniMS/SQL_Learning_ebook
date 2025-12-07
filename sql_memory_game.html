@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SmartSQL Hub – Memory Game</title>
+<style>
+body { 
+font-family: Arial, sans-serif; margin:0; background:#f4f6f8; color:#333; 
+}
+header { 
+background: maroon; color: #fff; padding: 15px; text-align: center; 
+}
+.container { 
+max-width: 900px; margin: 20px auto; padding: 20px; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); text-align:center; 
+}
+.level { 
+margin-bottom: 20px; padding: 15px; border: 2px solid #ddd; border-radius: 6px; 
+}
+.level h3 { 
+margin-top:0; color: maroon; 
+}
+button { 
+padding: 10px 16px; border: none; background: maroon; color:#fff; border-radius: 4px; cursor:pointer; margin:3px; 
+}
+button:hover { 
+opacity:0.9; 
+}
+#feedback { 
+margin-top: 10px; font-weight: bold; 
+}
+
+#badge {
+margin-top: 20px;
+font-size: 1.5em;
+color: gold;
+font-weight: bold;
+min-height: 1.5em;
+opacity: 0;
+transform: translateY(-20px);
+transition: all 0.6s ease;
+}
+#badge.show {
+opacity: 1;
+transform: translateY(0);
+}
+
+footer { text-align:center; font-size:0.9em; margin-top:20px; color:#666; }
+</style>
+</head>
+<body>
+<header>
+<h1>SmartSQL Hub</h1>
+<p>SQL Memory Game – Learn SQL the Easy Way</p>
+</header>
+<div class="container">
+<div id="mnemonic" style="font-weight:bold; font-size:1.2em; margin-bottom:10px;"></div>
+<div id="options"></div>
+<div id="feedback"></div>
+<div id="badge"></div>
+<div style="margin-top:10px; font-weight:bold;">Score: <span id="score">0</span></div>
+<button onclick="location.href='index.html'">⬅ Back to Index</button>
+</div>
+<footer>SmartSQL Hub © 2026 | SQL Learning Through Gamification</footer>
+<script>
+const questions = [
+{ mnemonic: 'SFW', correct: 'SELECT * FROM table WHERE condition;', options: ['SELECT * FROM table WHERE condition;', 'SELECT * FROM table ORDER BY column;', 'DELETE FROM table;'] },
+{ mnemonic: 'SFOB', correct: 'SELECT * FROM table ORDER BY column;', options: ['SELECT * FROM table WHERE condition;', 'SELECT * FROM table ORDER BY column;', 'INSERT INTO table VALUES (...);'] },
+{ mnemonic: 'IIV', correct: 'INSERT INTO table VALUES (...);', options: ['INSERT INTO table VALUES (...);', 'UPDATE table SET column=value;', 'DELETE FROM table WHERE condition;'] },
+{ mnemonic: 'ATAC', correct: 'ALTER TABLE ADD COLUMN column_name data_type;', options: ['ALTER TABLE ADD COLUMN column_name data_type;', 'ALTER TABLE DELETE COLUMN column_name;', 'CREATE TABLE table_name (...);'] },
+{ mnemonic: 'ATDC', correct: 'ALTER TABLE DELETE COLUMN column_name;', options: ['ALTER TABLE ADD COLUMN column_name data_type;', 'ALTER TABLE DELETE COLUMN column_name;', 'DROP TABLE table_name;'] },
+{ mnemonic: 'USW', correct: 'UPDATE table SET column=value WHERE condition;', options: ['UPDATE table SET column=value WHERE condition;', 'INSERT INTO table VALUES (...);', 'DELETE FROM table WHERE condition;'] },
+{ mnemonic: 'DFW', correct: 'DELETE FROM table WHERE condition;', options: ['DELETE FROM table WHERE condition;', 'SELECT * FROM table;', 'UPDATE table SET column=value;'] }
+];
+var current = 0;
+var score = 0;
+function loadQuestion() {
+if (!questions || questions.length === 0) return;
+if (current >= questions.length) {
+    document.getElementById('mnemonic').innerText = '🎉 Finished!';
+    document.getElementById('options').innerHTML = '';
+    // set badge
+    if (score === questions.length) {
+        document.getElementById('badge').innerText = '🏆 Perfect Score Badge Unlocked!';
+    } else if (score >= Math.floor(questions.length/2)) {
+        document.getElementById('badge').innerText = '🥈 Good Effort Badge Unlocked!';
+    } else {
+        document.getElementById('badge').innerText = '🥉 Keep Practicing Badge';
+    }
+    return;
+
+
+}
+const q = questions[current];
+if (!q.options || !Array.isArray(q.options)) {
+console.error('Options invalid at index', current, q);
+document.getElementById('mnemonic').innerText = '⚠️ Data error';
+document.getElementById('options').innerHTML = '';
+return;
+}
+document.getElementById('mnemonic').innerText = q.mnemonic;
+const optionsDiv = document.getElementById('options');
+optionsDiv.innerHTML = '';
+for (var i=0; i<q.options.length; i++) {
+var btn = document.createElement('button');
+btn.innerText = q.options[i];
+(function(option){ btn.onclick = function(){ checkAnswer(option); } })(q.options[i]);
+optionsDiv.appendChild(btn);
+}
+document.getElementById('feedback').innerText = '';
+document.getElementById('badge').innerText = '';
+}
+function checkAnswer(answer) {
+    if (!questions[current]) return;
+
+    if (answer === questions[current].correct) {
+        document.getElementById('feedback').innerText = '✅ Correct!';
+        score++;
+    } else {
+        document.getElementById('feedback').innerText = '❌ Incorrect. Try again!';
+    }
+
+    current++; // increment first
+    document.getElementById('score').innerText = score;
+
+   if (current >= questions.length) {
+    document.getElementById('mnemonic').innerText = '🎉 Finished!';
+    document.getElementById('options').innerHTML = '';
+
+    var badgeText = '';
+    if (score === questions.length) badgeText = '🏆 Perfect Score Badge Unlocked!';
+    else if (score >= Math.floor(questions.length/2)) badgeText = '🥈 Good Effort Badge Unlocked!';
+    else badgeText = '🥉 Keep Practicing Badge';
+
+    const badgeDiv = document.getElementById('badge');
+    badgeDiv.innerText = badgeText;
+    
+    // penting: trigger reflow supaya animasi jalan
+    badgeDiv.offsetWidth; // force reflow
+    badgeDiv.classList.add('show'); 
+    return;
+}
+setTimeout(loadQuestion, 500);
+}
+loadQuestion();
+</script>
+</body>
+</html>
